@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vehicle List - Exercise 3</title>
+        <link rel="stylesheet" href="css/style.css">
+        <!-- <script src="data.js"></script> -->
+        <script src="js/jQuery.js"></script>
+        <script src="js/axios.js"></script>
+        <script src="js/materialize.js"></script>
+        <style>
+            body { margin:50px; }
+            #content { border: 1px solid #ffffff; padding: 30px; border-radius: 8px; margin-bottom:10px; background-color: #ffffff}
+        </style>
+    </head>
+    <body>
+        <div class="Judul"><h1>~ Vehicle List Table ~</h1>
+        
+        </div>
+        
+        <div class="input-field col s12">
+            <input id="vehicles" type="search" class="validate">
+                <label for="vehicles">Search</label>
+        </div>
+           
+        <div class="columns">
+            <div id="content" class="column is-three-quarters">
+                <table id="table" class="highlight centered" background="assets/background.jpg">
+                    <thead>
+                        <tr> 
+                            <th>Name</th>
+                            <th>Model</th>
+                            <th>Manufacturer</th>
+                            <th>Cost in Credits</th>
+                            <th>Length</th>
+                            <th>Crew</th>
+                            <th>Passengers</th>
+                            <th>Cargo Capacity</th>
+                            <th>Vehicle Class</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel">
+                        
+                    </tbody>
+                </table>
+                <script>
+                    var apiSwapi = "https://swapi.co/api/vehicles/";
+
+                    function getData(){
+                        return axios.get(apiSwapi)
+                        .then(response => {
+                            return response.data;
+                            console.log('Data ditemukan');
+                        })
+                        .catch(function(error){
+                            console.log('Data tidak ditemukan');
+                        })
+                    }
+
+                    $(document).ready(function(){
+                        $("#vehicles").on("keyup", function() {
+                            var value = $(this).val().toLowerCase();
+                            $("#tabel tr").filter(function() {
+                                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                            });
+                        });
+                    });
+
+                    getData().then(data => {
+                        data.results.forEach(li => {
+                            document.querySelector('#tabel').insertAdjacentHTML('beforeend',
+                            '<td>'+li.name+'</td>'
+                            +'<td>'+li.model+'</td>'
+                            +'<td>'+li.manufacturer+'</td>'
+                            +'<td>'+li.cost_in_credits+'</td>'
+                            +'<td>'+li.length+'</td>'
+                            +'<td>'+li.crew+'</td>'
+                            +'<td>'+li.passengers+'</td>'
+                            +'<td>'+li.cargo_capacity+'</td>'
+                            +'<td>'+li.vehicle_class+'</td>')
+                        });
+                    })                    
+                </script>
+            </div>
+        </div>
+    </body>
+</html>
